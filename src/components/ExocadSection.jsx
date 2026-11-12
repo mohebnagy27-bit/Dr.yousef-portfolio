@@ -38,7 +38,7 @@ export default function ExocadSection() {
           <div className="exocad__track" style={{ '--index': index }}>
             {exocadCases.map((c, i) => (
               <div className="exocad__slide" key={c.id} aria-hidden={i !== index}>
-                <ExocadCase caseData={c} />
+                <ExocadCase caseData={c} active={i === index} />
               </div>
             ))}
           </div>

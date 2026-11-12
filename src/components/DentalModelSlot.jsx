@@ -1,24 +1,79 @@
-/**
- * PLACEHOLDER for the interactive 3D dental design of an Exocad case.
- *
- * No 3D model exists in the project yet and no 3D library is installed, so this renders
- * only a labelled empty area. It is NOT a 3D model and is not interactive.
- *
- * To make it real:
- * 1. Add the model file (for example .glb) under /public/models/ and set `model.src`
- *    for each case in src/data/exocadCases.js.
- * 2. Add a 3D renderer (for example three.js, or Google's <model-viewer> element).
- * 3. Replace the contents of the <div> below with the 3D canvas. The area has a fixed
- *    height and `overflow: hidden`, so the scene stays inside it.
- *
- * Note: horizontal swiping changes the case. When this area becomes touch-rotatable,
- * the swipe handling in ExocadSection.jsx must ignore touches that start here.
- */
-export default function DentalModelSlot({ model }) {
+import { useState } from 'react'
+
+const VIEWS = [
+  { id: 'pre', label: 'PRE' },
+  { id: 'post', label: 'POST' },
+]
+
+// Paths in src/data/exocadCases.js are relative to the site root (the files live in /public).
+function toUrl(path) {
+  return `${import.meta.env.BASE_URL}${path}`
+}
+
+// One self-contained model page. The parent gives it `key={src}`, so each file is a fresh
+// iframe that fades in once it has loaded.
+function ModelFrame({ src, title }) {
+  const [loaded, setLoaded] = useState(false)
+
   return (
-    <div className="exocad-case__model" role="group" aria-label={`${model.label} (placeholder)`}>
-      <span className="exocad-case__model-label">{model.label}</span>
-      <span className="exocad-case__model-note">3D model placeholder</span>
+    <iframe
+      className={`exocad-case__frame${loaded ? ' is-loaded' : ''}`}
+      src={src}
+      title={title}
+      onLoad={() => setLoaded(true)}
+      allowFullScreen
+    />
+  )
+}
+
+/**
+ * The 3D area of an Exocad case. It shows ONE self-contained HTML model (PRE or POST) in an
+ * iframe that fills the area, with PRE / POST buttons in the top-right corner.
+ *
+ * - Only the active case mounts an iframe, so hidden cases never load their models.
+ * - The iframe has no `sandbox`, so the model pages keep all their own behaviour.
+ * - If a case has no model files, the original placeholder is shown instead.
+ */
+function DentalModelSlot({ model, active }) {
+  const hasFiles = Boolean(model.pre || model.post)
+  const [view, setView] = useState(model.pre ? 'pre' : 'post')
+  const src = model[view]
+
+  return (
+    <div
+      className="exocad-case__model"
+      role="group"
+      aria-label={hasFiles ? model.label : `${model.label} (placeholder)`}
+    >
+      {hasFiles ? (
+        active && (
+          <>
+            <div className="exocad-case__switch" role="group" aria-label="Model view">
+              {VIEWS.map(({ id, label }) => (
+                <button
+                  key={id}
+                  type="button"
+                  className={`exocad-case__switch-btn${view === id ? ' is-active' : ''}`}
+                  aria-pressed={view === id}
+                  disabled={!model[id]}
+                  onClick={() => setView(id)}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+
+            {src && <ModelFrame key={src} src={toUrl(src)} title={`${model.label} (${view.toUpperCase()})`} />}
+          </>
+        )
+      ) : (
+        <>
+          <span className="exocad-case__model-label">{model.label}</span>
+          <span className="exocad-case__model-note">3D model placeholder</span>
+        </>
+      )}
     </div>
   )
 }
+
+export default DentalModelSlot

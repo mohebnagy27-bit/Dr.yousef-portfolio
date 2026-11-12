@@ -1,7 +1,7 @@
 import DentalModelSlot from './DentalModelSlot.jsx'
 
 // One Exocad case: a single glass surface holding the information (top) and the 3D design (below).
-export default function ExocadCase({ caseData }) {
+export default function ExocadCase({ caseData, active }) {
   const { title, description, details, model } = caseData
 
   return (
@@ -19,7 +19,7 @@ export default function ExocadCase({ caseData }) {
         </dl>
       </div>
 
-      <DentalModelSlot model={model} />
+      <DentalModelSlot model={model} active={active} />
     </article>
   )
 }
