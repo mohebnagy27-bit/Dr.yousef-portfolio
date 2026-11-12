@@ -1,0 +1,363 @@
+/* Shared glass surface tokens for the carousel cards and the viewer. */
+.cases,
+.viewer {
+  --glass-bg: rgba(236, 232, 225, 0.05);
+  --glass-border: rgba(236, 232, 225, 0.14);
+  --glass-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+  --card-w: clamp(16rem, 34vw, 30rem);
+}
+
+/* ---------- Carousel ---------- */
+.cases__stage {
+  --step: calc(var(--card-w) * 0.95); /* distance between card centres */
+  position: relative;
+  height: calc(var(--card-w) * 0.75 + 9rem);
+  overflow: hidden; /* neighbours may be cut off at the edges; never causes page overflow */
+  touch-action: pan-y; /* vertical scroll stays native; horizontal swipes go to the carousel */
+}
+
+.case-card {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  display: flex;
+  flex-direction: column;
+  width: var(--card-w);
+  padding: 0.625rem;
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow: var(--glass-shadow);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+  transform: translate(calc(-50% + var(--offset) * var(--step)), -50%)
+    scale(var(--scale, 1));
+  opacity: var(--opacity, 1);
+  transition:
+    transform 0.7s var(--ease-out),
+    opacity 0.7s ease,
+    visibility 0.7s;
+}
+
+/* Centre card is largest and clearest; neighbours are smaller and fainter. */
+.case-card[data-distance="0"] {
+  --scale: 1;
+  --opacity: 1;
+  z-index: 3;
+}
+.case-card[data-distance="1"] {
+  --scale: 0.78;
+  --opacity: 0.5;
+  z-index: 2;
+}
+.case-card[data-distance="2"] {
+  --scale: 0.6;
+  --opacity: 0.22;
+  z-index: 1;
+}
+.case-card[data-distance="3"] {
+  --scale: 0.5;
+  --opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.case-card__image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  border-radius: 4px;
+}
+
+.case-card__body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 0.875rem 0.375rem 0.375rem;
+}
+
+.case-card__title {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  line-height: 1.2;
+}
+
+.case-card__text {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  font-size: 0.85rem;
+  line-height: 1.5;
+  color: var(--color-text-muted);
+}
+
+.cases__controls {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+/* ---------- Shared small controls ---------- */
+.icon-btn {
+  display: grid;
+  place-items: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  padding: 0;
+  border: 1px solid var(--glass-border);
+  border-radius: 4px;
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  color: var(--color-text);
+  cursor: pointer;
+  transition:
+    background-color 0.3s ease,
+    opacity 0.3s ease;
+}
+
+.icon-btn:hover:not(:disabled) {
+  background: rgba(236, 232, 225, 0.1);
+}
+
+.icon-btn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.chevron {
+  display: block;
+  width: 0.55rem;
+  height: 0.55rem;
+  border: 0 solid currentColor;
+}
+
+.chevron--left {
+  border-left-width: 1.5px;
+  border-bottom-width: 1.5px;
+  transform: translateX(2px) rotate(45deg);
+}
+
+.chevron--right {
+  border-right-width: 1.5px;
+  border-top-width: 1.5px;
+  transform: translateX(-2px) rotate(45deg);
+}
+
+/* ---------- Viewer ---------- */
+/* Full-screen blurred, dark green-black overlay. The viewer sits on top and is not blurred. */
+.viewer-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(2, 10, 8, 0.55);
+  -webkit-backdrop-filter: blur(10px);
+  backdrop-filter: blur(10px);
+  overscroll-behavior: contain;
+}
+
+.viewer {
+  width: 100%;
+  max-width: 52rem;
+  max-height: calc(100vh - 2rem);
+  max-height: calc(100svh - 2rem);
+  overflow-y: auto;
+  padding: 1.25rem clamp(1rem, 4vw, 4.5rem) 1.5rem;
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow: var(--glass-shadow);
+}
+
+.viewer:focus {
+  outline: none;
+}
+
+.viewer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin: 0 calc(-1 * clamp(1rem, 4vw, 4.5rem)) 1rem;
+  padding: 0 clamp(1rem, 4vw, 4.5rem);
+}
+
+.viewer__title {
+  font-family: var(--font-display);
+  font-size: 1.35rem;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+.viewer__close {
+  padding: 5px 10px;
+  border: 1px solid var(--glass-border);
+  border-radius: 4px;
+  background: transparent;
+  color: var(--color-text-muted);
+  font: inherit;
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.viewer__close:hover {
+  color: var(--color-text);
+}
+
+.viewer__figure {
+  margin: 0;
+}
+
+.viewer__media {
+  position: relative;
+  /* Keeps the whole viewer inside short desktop windows. */
+  max-width: max(14rem, calc((100vh - 14rem) * 1.6));
+  max-width: max(14rem, calc((100svh - 14rem) * 1.6));
+  margin: 0 auto;
+}
+
+/* Fixed ratio keeps the layout stable between images of different shapes. */
+.viewer__frame {
+  aspect-ratio: 16 / 10;
+  overflow: hidden;
+  border-radius: 4px;
+  touch-action: pan-y; /* vertical scroll stays native; horizontal swipes change the image */
+}
+
+.viewer__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  animation: viewer-in 0.45s var(--ease-out) both;
+}
+
+.viewer__arrow {
+  position: absolute;
+  top: 50%;
+  z-index: 1;
+  margin-top: -1.25rem;
+}
+
+/* Centred in the glass padding to the left/right of the image. */
+.viewer__arrow--prev {
+  left: calc(-1 * clamp(1rem, 4vw, 4.5rem) / 2 - 1.25rem);
+}
+
+.viewer__arrow--next {
+  right: calc(-1 * clamp(1rem, 4vw, 4.5rem) / 2 - 1.25rem);
+}
+
+.viewer__caption {
+  min-height: 3em; /* reserves room for two lines so the dots do not jump */
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  text-align: center;
+  color: rgba(236, 232, 225, 0.82);
+  animation: viewer-caption-in 0.45s ease both;
+}
+
+.viewer__dots {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+.viewer__dot {
+  position: relative;
+  width: 1.25rem;
+  height: 1.25rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.viewer__dot::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 6px;
+  height: 6px;
+  margin: -3px 0 0 -3px;
+  border-radius: 50%;
+  background: rgba(236, 232, 225, 0.3);
+  transition:
+    background-color 0.3s ease,
+    transform 0.3s ease;
+}
+
+.viewer__dot:hover::before {
+  background: rgba(236, 232, 225, 0.55);
+}
+
+.viewer__dot.is-active::before {
+  background: var(--color-text);
+  transform: scale(1.5);
+}
+
+@keyframes viewer-in {
+  from {
+    opacity: 0;
+    transform: translateX(calc(var(--dir, 0) * 14px));
+  }
+}
+
+@keyframes viewer-caption-in {
+  from {
+    opacity: 0;
+  }
+}
+
+/* ---------- Small screens ---------- */
+@media (max-width: 760px) {
+  .cases,
+  .viewer {
+    --card-w: clamp(15rem, 70vw, 20rem);
+  }
+
+  /* On phones, images change by swiping or with the dots. */
+  .viewer__arrow {
+    display: none;
+  }
+}
+
+/* Gutter too narrow for the arrows: place them on the image edges instead. */
+@media (max-width: 900px) {
+  .viewer__arrow--prev {
+    left: 0.5rem;
+  }
+
+  .viewer__arrow--next {
+    right: 0.5rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .case-card {
+    transition: none;
+  }
+
+  .viewer__image,
+  .viewer__caption {
+    animation: none;
+  }
+}

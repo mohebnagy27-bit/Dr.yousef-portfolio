@@ -1,0 +1,197 @@
+.hero {
+  min-height: 100vh;
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  /* top padding clears the fixed navbar */
+  padding: clamp(6rem, 12vh, 8rem) var(--page-gutter) clamp(2rem, 5vh, 4rem);
+}
+
+/* 12-column grid. Portrait: columns 1–6 (left). Info: 7–12 (right). */
+.hero__inner {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  column-gap: clamp(1rem, 2vw, 2rem);
+  align-items: center;
+}
+
+/* ---------- Portrait (left) ---------- */
+.hero__portrait {
+  grid-column: 1 / span 6;
+  margin: 0;
+  justify-self: start;
+  width: 100%;
+  overflow: hidden;
+  /* Bottom of the portrait dissolves into the background: no hard edge. */
+  -webkit-mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 55%,
+    rgba(0, 0, 0, 0.85) 67%,
+    rgba(0, 0, 0, 0.55) 79%,
+    rgba(0, 0, 0, 0.2) 91%,
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to bottom,
+    #000 0%,
+    #000 55%,
+    rgba(0, 0, 0, 0.85) 67%,
+    rgba(0, 0, 0, 0.55) 79%,
+    rgba(0, 0, 0, 0.2) 91%,
+    transparent 100%
+  );
+  animation: portrait-reveal 1.3s var(--ease-out) both;
+}
+
+/* Natural proportions: no forced aspect ratio, no cropping. */
+.hero__portrait-img {
+  display: block;
+  width: auto;
+  height: auto;
+  max-width: 100%;
+  max-height: calc(100vh - 9rem);
+  max-height: calc(100svh - 9rem);
+  animation: portrait-settle 1.8s var(--ease-out) both;
+}
+
+/* ---------- Information (right) ---------- */
+.hero__info {
+  grid-column: 7 / span 6;
+  max-width: 36rem;
+  padding-left: clamp(0rem, 3vw, 3rem);
+}
+
+.hero__eyebrow {
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.hero__name {
+  margin-top: 1.5rem;
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: clamp(2.75rem, 5.6vw, 5.25rem);
+  line-height: 1.02;
+  letter-spacing: -0.015em;
+}
+
+.hero__title {
+  margin-top: 1.25rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--color-line);
+  font-size: 0.95rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+}
+
+.hero__intro {
+  margin-top: 2rem;
+  font-size: clamp(1rem, 1.25vw, 1.125rem);
+  line-height: 1.75;
+  color: rgba(236, 232, 225, 0.82);
+}
+
+.hero__links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.75rem;
+  margin: 2.25rem 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.hero__links a {
+  text-decoration: none;
+  color: var(--color-text-muted);
+  transition: color 0.3s ease;
+}
+
+.hero__links a:hover {
+  color: var(--color-text);
+}
+
+/* ---------- Entrance animations ---------- */
+.reveal {
+  animation: fade-up 1s var(--ease-out) both;
+  animation-delay: calc(0.45s + var(--i, 0) * 0.12s);
+}
+
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+
+@keyframes portrait-reveal {
+  from {
+    clip-path: inset(0 0 100% 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes portrait-settle {
+  from {
+    transform: scale(1.08);
+  }
+}
+
+/* ---------- Tablet ---------- */
+@media (max-width: 1024px) {
+  .hero__portrait {
+    grid-column: 1 / span 6;
+  }
+  .hero__info {
+    grid-column: 7 / span 6;
+  }
+}
+
+/* ---------- Mobile: natural stack ---------- */
+@media (max-width: 760px) {
+  .hero {
+    align-items: flex-start;
+    padding-top: 5.5rem;
+    padding-bottom: 5rem;
+  }
+
+  .hero__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 2.25rem;
+  }
+
+  .hero__portrait-img {
+    max-height: 70svh;
+  }
+
+  .hero__info {
+    max-width: none;
+    padding-left: 0;
+  }
+
+  .hero__name {
+    margin-top: 1.1rem;
+  }
+}
+
+/* ---------- Accessibility ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .hero__portrait,
+  .hero__portrait-img,
+  .reveal {
+    animation: none;
+  }
+}

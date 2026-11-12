@@ -1,0 +1,130 @@
+.contact {
+  --contact-green: #3fae86;
+  --contact-glow: rgba(63, 174, 134, 0.4);
+
+  display: flex;
+  flex-direction: column;
+  min-height: 70vh;
+  padding: clamp(4rem, 10vh, 7rem) var(--page-gutter) 1.5rem;
+}
+
+.contact__main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ---------- Heading and glowing line ---------- */
+.contact__title {
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0.2em;
+  text-align: center;
+  color: var(--color-text);
+}
+
+/* Hidden until the section is in view, then draws out from the centre with a soft glow. */
+.contact__line {
+  width: clamp(6rem, 14vw, 10rem);
+  height: 1px;
+  margin-top: 0.9rem;
+  background: var(--contact-green);
+  box-shadow: 0 0 0 rgba(63, 174, 134, 0);
+  opacity: 0;
+  transform: scaleX(0);
+  transition:
+    transform 1.2s var(--ease-out),
+    opacity 1.2s ease,
+    box-shadow 1.6s ease;
+}
+
+.contact.is-visible .contact__line {
+  opacity: 1;
+  transform: scaleX(1);
+  box-shadow: 0 0 8px 1px var(--contact-glow);
+}
+
+/* ---------- Contact links ---------- */
+.contact__links {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1.25rem clamp(2rem, 6vw, 4.5rem);
+  margin: clamp(2.5rem, 6vh, 3.5rem) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.contact__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.5rem 0.25rem;
+  font-size: 0.95rem;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+  color: rgba(236, 232, 225, 0.82);
+  transition:
+    color 0.3s ease,
+    transform 0.3s ease;
+}
+
+.contact__link svg {
+  flex: none;
+  display: block;
+}
+
+.contact__link:hover {
+  color: var(--color-text);
+  transform: translateY(-1px);
+}
+
+/* ---------- Footer credit ---------- */
+.contact__footer {
+  margin-top: 2rem;
+  text-align: center;
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  color: var(--color-text-muted);
+}
+
+.contact__footer p {
+  margin: 0;
+}
+
+.contact__footer a {
+  color: inherit;
+  text-decoration: underline;
+  text-decoration-color: rgba(236, 232, 225, 0.3);
+  text-underline-offset: 3px;
+  transition:
+    color 0.3s ease,
+    text-decoration-color 0.3s ease;
+}
+
+.contact__footer a:hover {
+  color: var(--color-text);
+  text-decoration-color: rgba(236, 232, 225, 0.7);
+}
+
+/* Reduced motion: the line is simply shown, with no animation. */
+@media (prefers-reduced-motion: reduce) {
+  .contact__line {
+    opacity: 1;
+    transform: none;
+    box-shadow: 0 0 8px 1px var(--contact-glow);
+    transition: none;
+  }
+
+  .contact__link,
+  .contact__footer a {
+    transition: none;
+  }
+
+  .contact__link:hover {
+    transform: none;
+  }
+}

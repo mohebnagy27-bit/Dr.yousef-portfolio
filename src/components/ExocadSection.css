@@ -1,0 +1,180 @@
+/* Same glass tokens as Clinical Cases. The .icon-btn and .chevron button styles are
+   reused from ClinicalCases.css (global classes). */
+.exocad {
+  --glass-bg: rgba(236, 232, 225, 0.05);
+  --glass-border: rgba(236, 232, 225, 0.14);
+  --glass-shadow: 0 18px 40px rgba(0, 0, 0, 0.35);
+
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+  padding: clamp(4rem, 10vh, 8rem) var(--page-gutter);
+}
+
+.exocad__inner {
+  width: 100%;
+  max-width: 62rem;
+  margin: 0 auto;
+}
+
+/* ---------- Horizontal browsing ---------- */
+.exocad__viewport {
+  overflow: hidden; /* only the active case is visible */
+  padding: 1.5rem 0; /* room for the glass shadow */
+  touch-action: pan-y; /* vertical scroll stays native; horizontal swipes change the case */
+}
+
+.exocad__track {
+  display: flex;
+  transform: translateX(calc(var(--index) * -100%));
+  transition: transform 0.7s var(--ease-out);
+}
+
+.exocad__slide {
+  flex: 0 0 100%;
+  min-width: 0;
+}
+
+.exocad__controls {
+  display: flex;
+  justify-content: center;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+/* ---------- One unified glass case: information on top, 3D design below ---------- */
+.exocad-case {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid var(--glass-border);
+  border-radius: 8px;
+  background: var(--glass-bg);
+  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(14px);
+  box-shadow: var(--glass-shadow);
+}
+
+/* The two areas are inset panels of the same glass surface. */
+.exocad-case__info,
+.exocad-case__model {
+  border: 1px solid var(--glass-border);
+  border-radius: 4px;
+  background: rgba(236, 232, 225, 0.03);
+}
+
+.exocad-case__info {
+  padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+.exocad-case__title {
+  font-family: var(--font-display);
+  font-size: clamp(1.5rem, 2.6vw, 2.1rem);
+  font-weight: 400;
+  line-height: 1.15;
+}
+
+.exocad-case__text {
+  max-width: 46rem;
+  margin-top: 0.75rem;
+  font-size: 0.95rem;
+  line-height: 1.7;
+  color: rgba(236, 232, 225, 0.82);
+}
+
+.exocad-case__details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(10rem, 1fr));
+  gap: 1rem 1.5rem;
+  margin: 1.5rem 0 0;
+  padding-top: 1.25rem;
+  border-top: 1px solid var(--glass-border);
+}
+
+.exocad-case__detail dt {
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+.exocad-case__detail dd {
+  margin: 0.25rem 0 0;
+  font-size: 0.95rem;
+}
+
+/* ---------- 3D design area (placeholder for now) ---------- */
+.exocad-case__model {
+  position: relative;
+  display: grid;
+  place-content: center;
+  gap: 0.5rem;
+  height: clamp(16rem, 42vh, 26rem);
+  overflow: hidden; /* a future 3D scene stays inside this area */
+  text-align: center;
+}
+
+.exocad-case__model-label {
+  font-size: 0.8rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(236, 232, 225, 0.82);
+}
+
+.exocad-case__model-note {
+  font-size: 0.7rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-text-muted);
+}
+
+/* ---------- Desktop and large screens: information LEFT, 3D design RIGHT ---------- */
+
+/* @media (min-width: 1024px) {
+  .exocad__inner {
+    max-width: 72rem;
+  }
+
+  .exocad-case {
+    flex-direction: row;
+    align-items: stretch;
+  }
+
+  .exocad-case__info {
+    flex: 0 1 40%;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* vertically centred against the taller 3D area */
+  }
+
+  .exocad-case__model {
+    flex: 1 1 0;
+    min-width: 0;
+    height: auto;
+    min-height: clamp(18rem, 50vh, 30rem);
+  }
+} */
+
+/* ---------- Small screens ---------- */
+@media (max-width: 760px) {
+  .exocad-case {
+    gap: 0.625rem;
+    padding: 0.625rem;
+  }
+
+  .exocad-case__details {
+    grid-template-columns: 1fr;
+  }
+
+  .exocad-case__model {
+    height: clamp(14rem, 36vh, 20rem);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .exocad__track {
+    transition: none;
+  }
+}

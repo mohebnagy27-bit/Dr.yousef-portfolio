@@ -1,0 +1,79 @@
+/* Global tokens and reset. Section-specific styles live next to their components. */
+:root {
+  --color-bg: #000;
+  --color-green-dark: #0a3326; /* gradient start */
+  --color-green-nav: #0f5a43; /* active nav item, bottom */
+  --color-text: #ece8e1;
+  --color-text-muted: #8f9399;
+  --color-line: rgba(236, 232, 225, 0.14);
+
+  --font-display: "Instrument Serif", "Times New Roman", serif;
+  --font-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+
+  --page-gutter: clamp(1.25rem, 5vw, 5rem);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  background: var(--color-bg); /* fallback under the gradient */
+  scroll-behavior: smooth;
+}
+
+/* Site-wide dark green -> black gradient. Fixed to the viewport, so every
+   future section sits on the same continuous background with no seams. */
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    var(--color-green-dark) 0%,
+    #061f18 35%,
+    #020a08 70%,
+    #000 100%
+  );
+}
+
+body {
+  margin: 0;
+  background: transparent;
+  color: var(--color-text);
+  font-family: var(--font-body);
+  font-weight: 300;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+h1,
+h2,
+h3,
+p {
+  margin: 0;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+a {
+  color: inherit;
+}
+
+:focus-visible {
+  outline: 1px solid var(--color-text);
+  outline-offset: 4px;
+}

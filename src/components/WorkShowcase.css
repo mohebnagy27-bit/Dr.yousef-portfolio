@@ -1,0 +1,11 @@
+.showcase {
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+  padding: clamp(4rem, 10vh, 8rem) var(--page-gutter);
+}
+.showcase__inner {
+  width: 100%;
+  max-width: 1440px;
+  margin: 0 auto;
+}
